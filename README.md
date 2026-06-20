@@ -1,10 +1,11 @@
 # Warm Winter examples
 
-Real, copyable examples of gating an AI agent's decisions with the
-[Warm Winter](https://warmwinter.io) calibrated trust gate — the small check that
-answers, before you act: **is this trustworthy enough to act on, or should we
-escalate / abstain?** You keep executing; the gate only judges, then learns from
-the reported outcome and sharpens for that kind of decision.
+**Letting an agent merge its own PRs or fire its own tools is great — until the one
+time it shouldn't have.** These are copyable examples of putting a calibrated check
+in front of those decisions with [Warm Winter](https://warmwinter.io): before the
+action, it says **act, escalate, or abstain** — and abstains when it isn't grounded
+enough to be sure. You keep executing; it only judges, then learns from the outcome
+you report.
 
 ```bash
 pip install warmwinter      # Python
