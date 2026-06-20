@@ -1,0 +1,56 @@
+# Warm Winter auto-merge gate — COPY THIS to .github/workflows/ in YOUR repo.
+#
+# It runs after your checks on a PR labeled `agent` (tweak the trigger), asks the
+# gate whether the PR is trustworthy enough to merge unsupervised, and only enables
+# auto-merge if the gate says "act". Otherwise it requests a human review.
+#
+# Setup:
+#   1. pip install warmwinter is done in the job below.
+#   2. Add a repo secret WARMWINTER_API_KEY (mint a key on the Warm Winter dashboard).
+#   3. Replace the CI_CONFIDENCE step with YOUR real signal in [0,1].
+#
+# Closing the loop (so the cell actually learns) lives in a separate workflow that
+# watches `main` after the merge and runs report_outcome.py — see report_outcome.py.
+
+name: Warm Winter auto-merge gate
+on:
+  pull_request:
+    types: [labeled, synchronize]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  gate:
+    if: contains(github.event.pull_request.labels.*.name, 'agent')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: pip install warmwinter
+
+      # TODO: replace this with YOUR real confidence signal in [0,1].
+      - id: ci
+        run: echo "confidence=0.85" >> "$GITHUB_OUTPUT"
+
+      - id: gate
+        env:
+          WARMWINTER_API_KEY: ${{ secrets.WARMWINTER_API_KEY }}
+          CI_CONFIDENCE: ${{ steps.ci.outputs.confidence }}
+        run: python auto-merge/gate_merge.py
+
+      - name: Auto-merge — the gate cleared it
+        if: steps.gate.outputs.verdict == 'act'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge --auto --squash "${{ github.event.pull_request.number }}"
+
+      - name: Request review — the gate did not
+        if: steps.gate.outputs.verdict != 'act'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr comment "${{ github.event.pull_request.number }}"
+             --body "Warm Winter held this one for review (verdict: ${{ steps.gate.outputs.verdict }})."
