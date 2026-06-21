@@ -7,6 +7,8 @@ action, it says **act, escalate, or abstain** — and abstains when it isn't gro
 enough to be sure. You keep executing; it only judges, then learns from the outcome
 you report.
 
+![The full cycle: integrate once, then a runtime loop gates every action — ask, verdict, route, report the outcome, calibrate — and the value compounds.](full-cycle.svg)
+
 ```bash
 pip install warmwinter      # Python
 npm install warmwinter      # TypeScript / JavaScript

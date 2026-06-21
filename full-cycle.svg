@@ -1,0 +1,84 @@
+<svg width="100%" viewBox="0 0 780 432" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif,system-ui,sans-serif" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">The full Warm Winter user cycle</title>
+  <desc id="desc">Integrate once, then a five-step runtime loop repeats on every action: ask, verdict, route, report the outcome, calibrate — which compounds into savings and earned autonomy.</desc>
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#6a6f78"/>
+    </marker>
+    <marker id="arwA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#e8722c"/>
+    </marker>
+  </defs>
+
+  <rect width="780" height="432" fill="#fbfbfa"/>
+
+  <text x="40" y="30" font-size="18" font-weight="700" fill="#1c1e24">The full cycle</text>
+  <text x="40" y="50" font-size="12" fill="#6a6f78">Integrate once → it gates every action → value compounds.</text>
+
+  <!-- ADOPT ONCE -->
+  <rect x="92" y="68" width="596" height="32" rx="8" fill="#ffffff" stroke="#e3e3e3"/>
+  <text x="106" y="88" font-size="9" letter-spacing="1.5" font-family="ui-monospace,monospace" fill="#e8722c">ADOPT ONCE</text>
+  <text x="200" y="88" font-size="12" fill="#6a6f78">Discover · mint a key · integrate (~5 lines)</text>
+  <line x1="390" y1="100" x2="390" y2="138" stroke="#6a6f78" stroke-width="1.5" marker-end="url(#arw)"/>
+
+  <text x="92" y="132" font-size="9" letter-spacing="1.5" font-family="ui-monospace,monospace" fill="#e8722c">THE RUNTIME HEARTBEAT</text>
+
+  <!-- 5 loop nodes -->
+  <g>
+    <!-- 1 Ask -->
+    <rect x="92" y="146" width="100" height="74" rx="8" fill="#ffffff" stroke="#e3e3e3"/>
+    <circle cx="106" cy="160" r="9" fill="#ffffff" stroke="#c9c9c9"/>
+    <text x="106" y="163.5" font-size="10" text-anchor="middle" fill="#6a6f78">1</text>
+    <text x="142" y="186" font-size="13" font-weight="600" text-anchor="middle" fill="#1c1e24">Ask</text>
+    <text x="142" y="204" font-size="10" font-family="ui-monospace,monospace" text-anchor="middle" fill="#6a6f78">decide()</text>
+
+    <!-- 2 Verdict -->
+    <rect x="216" y="146" width="100" height="74" rx="8" fill="#ffffff" stroke="#e3e3e3"/>
+    <circle cx="230" cy="160" r="9" fill="#ffffff" stroke="#c9c9c9"/>
+    <text x="230" y="163.5" font-size="10" text-anchor="middle" fill="#6a6f78">2</text>
+    <text x="266" y="186" font-size="13" font-weight="600" text-anchor="middle" fill="#1c1e24">Verdict</text>
+    <text x="266" y="204" font-size="9.5" text-anchor="middle" fill="#6a6f78">act · escalate · abstain</text>
+
+    <!-- 3 Route -->
+    <rect x="340" y="146" width="100" height="74" rx="8" fill="#ffffff" stroke="#e3e3e3"/>
+    <circle cx="354" cy="160" r="9" fill="#ffffff" stroke="#c9c9c9"/>
+    <text x="354" y="163.5" font-size="10" text-anchor="middle" fill="#6a6f78">3</text>
+    <text x="390" y="186" font-size="13" font-weight="600" text-anchor="middle" fill="#1c1e24">Route</text>
+    <text x="390" y="204" font-size="10" text-anchor="middle" fill="#6a6f78">the chosen path</text>
+
+    <!-- 4 Outcome (highlighted) -->
+    <rect x="464" y="146" width="100" height="74" rx="8" fill="#ffffff" stroke="#e8722c" stroke-width="2"/>
+    <circle cx="478" cy="160" r="9" fill="#e8722c"/>
+    <text x="478" y="163.5" font-size="10" text-anchor="middle" fill="#ffffff">4</text>
+    <text x="514" y="186" font-size="13" font-weight="600" text-anchor="middle" fill="#1c1e24">Outcome</text>
+    <text x="514" y="204" font-size="9.5" text-anchor="middle" fill="#e8722c">report what happened</text>
+
+    <!-- 5 Calibrate -->
+    <rect x="588" y="146" width="100" height="74" rx="8" fill="#ffffff" stroke="#e3e3e3"/>
+    <circle cx="602" cy="160" r="9" fill="#ffffff" stroke="#c9c9c9"/>
+    <text x="602" y="163.5" font-size="10" text-anchor="middle" fill="#6a6f78">5</text>
+    <text x="638" y="186" font-size="13" font-weight="600" text-anchor="middle" fill="#1c1e24">Calibrate</text>
+    <text x="638" y="204" font-size="9.5" text-anchor="middle" fill="#6a6f78">seeded → verified</text>
+
+    <!-- arrows between -->
+    <line x1="194" y1="183" x2="214" y2="183" stroke="#6a6f78" stroke-width="1.5" marker-end="url(#arw)"/>
+    <line x1="318" y1="183" x2="338" y2="183" stroke="#6a6f78" stroke-width="1.5" marker-end="url(#arw)"/>
+    <line x1="442" y1="183" x2="462" y2="183" stroke="#6a6f78" stroke-width="1.5" marker-end="url(#arw)"/>
+    <line x1="566" y1="183" x2="586" y2="183" stroke="#6a6f78" stroke-width="1.5" marker-end="url(#arw)"/>
+  </g>
+
+  <!-- loop back -->
+  <path d="M638 220 L638 250 L142 250 L142 222" fill="none" stroke="#e8722c" stroke-width="1.5" marker-end="url(#arwA)"/>
+  <rect x="318" y="240" width="144" height="20" rx="10" fill="#fbfbfa"/>
+  <text x="390" y="254" font-size="10.5" font-family="ui-monospace,monospace" text-anchor="middle" fill="#e8722c">repeats every action</text>
+
+  <!-- VALUE -->
+  <rect x="92" y="290" width="596" height="32" rx="8" fill="#ffffff" stroke="#e3e3e3"/>
+  <text x="106" y="310" font-size="9" letter-spacing="1.5" font-family="ui-monospace,monospace" fill="#e8722c">VALUE COMPOUNDS</text>
+  <text x="230" y="310" font-size="12" fill="#6a6f78">see savings · trust grows · escalate less · expand</text>
+
+  <text x="390" y="352" font-size="11" font-family="ui-monospace,monospace" text-anchor="middle" fill="#6a6f78">more use → more outcomes → more verified → more autonomy ↻</text>
+
+  <text x="40" y="392" font-size="11.5" fill="#6a6f78">Your effort is once, at integration. After that it runs — and gets smarter every loop.</text>
+  <text x="40" y="414" font-size="11.5" fill="#6a6f78">Step 4 is the engine: the outcome is a natural signal you already have (CI, a reopen, a correction), not manual grading.</text>
+</svg>
