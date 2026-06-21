@@ -16,8 +16,11 @@ Mint a key on the [dashboard](https://warmwinter.io), then:
 
 | Example | What it gates |
 |---|---|
+| [`model-routing/`](model-routing/) | Is the cheap model enough here, or escalate to the expensive one? ~95% of the quality at 57% of the cost. |
 | [`auto-merge/`](auto-merge/) | Should an agent's PR auto-merge unsupervised? CI is the verifier — it auto-reports. |
 | [`tool-call/`](tool-call/) | Should an agent execute this tool call, or stop and ask a human? Stakes scale with reversibility. |
+| [`rag/`](rag/) | Is the retrieval grounded enough to answer, or abstain instead of guessing? |
+| [`support/`](support/) | Auto-resolve the ticket, or route to a human? The reopen is the verifier. |
 
 The gate **advises** — your code decides whether to act. It never sits in your
 execution path. The value isn't routing; it's *calibration*: a check that knows
