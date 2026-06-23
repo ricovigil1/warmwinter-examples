@@ -1,0 +1,21 @@
+{
+  "//": "Add to .claude/settings.json. Replace the path. Requires: pip install warmwinter, and WARMWINTER_API_KEY in env.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit|Bash|WebFetch|WebSearch",
+        "hooks": [
+          { "type": "command", "command": "python /ABS/PATH/ww_claude_code_gate.py pre" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit|Bash|WebFetch|WebSearch",
+        "hooks": [
+          { "type": "command", "command": "python /ABS/PATH/ww_claude_code_gate.py post" }
+        ]
+      }
+    ]
+  }
+}

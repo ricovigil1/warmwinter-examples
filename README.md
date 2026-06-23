@@ -21,6 +21,7 @@ Mint a key on the [dashboard](https://warmwinter.io), then:
 | [`model-routing/`](model-routing/) | Is the cheap model enough here, or escalate to the expensive one? ~95% of the quality at 57% of the cost. |
 | [`auto-merge/`](auto-merge/) | Should an agent's PR auto-merge unsupervised? CI is the verifier — it auto-reports. |
 | [`tool-call/`](tool-call/) | Should an agent execute this tool call, or stop and ask a human? Stakes scale with reversibility. |
+| [`claude-code/`](claude-code/) | Gate your **Claude Code** agent's tool calls via a hook. Starts in shadow (observe-only, zero friction) and earns autonomy as CI/health outcomes verify each cell. |
 | [`rag/`](rag/) | Is the retrieval grounded enough to answer, or abstain instead of guessing? |
 | [`support/`](support/) | Auto-resolve the ticket, or route to a human? The reopen is the verifier. |
 
