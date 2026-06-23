@@ -19,12 +19,46 @@ import json
 import os
 import shutil
 import sys
+import time
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 MATCHER = "Edit|Write|MultiEdit|NotebookEdit|Bash|WebFetch|WebSearch"
 HOOK_DIR = Path.home() / ".warmwinter" / "hook"   # stable copy (survives git branch switches)
 HOOK_FILE = HOOK_DIR / "ww_claude_code_gate.py"
 HERE = Path(__file__).resolve().parent
+
+
+def _post(url: str, payload: dict) -> dict:
+    req = urllib.request.Request(url, data=json.dumps(payload).encode(),
+                                 headers={"Content-Type": "application/json"}, method="POST")
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return json.loads(r.read().decode())
+
+
+def _device_flow(base_url: str) -> str:
+    """Keyless: start a grant, ask the dev to approve it in their browser, poll for the
+    minted key. Returns the plaintext key."""
+    base = base_url.rstrip("/")
+    start = _post(base + "/api/v1/gate/device/start", {})
+    uri, code, dc = start["verification_uri"], start["user_code"], start["device_code"]
+    interval = int(start.get("interval", 3))
+    deadline = time.time() + int(start.get("expires_in", 600))
+    print(f"\n  Open this in your browser (logged in) and approve:\n"
+          f"    {uri}?code={code}\n  Code: {code}\n\n  Waiting for approval…", flush=True)
+    while time.time() < deadline:
+        time.sleep(interval)
+        try:
+            res = _post(base + "/api/v1/gate/device/token", {"device_code": dc})
+        except urllib.error.URLError:
+            continue
+        if res.get("status") == "approved" and res.get("key"):
+            print("  ✓ approved — key received.")
+            return res["key"]
+        if res.get("status") == "expired":
+            break
+    sys.exit("Approval timed out. Run init.py --device again.")
 
 
 def _settings_paths(scope: str):
@@ -49,14 +83,20 @@ def main():
     ap = argparse.ArgumentParser(prog="warmwinter init")
     ap.add_argument("--key", default=os.environ.get("WARMWINTER_API_KEY"),
                     help="your gate API key (or set WARMWINTER_API_KEY)")
+    ap.add_argument("--device", action="store_true",
+                    help="keyless: approve from your browser instead of pasting a key")
     ap.add_argument("--scope", choices=("global", "project"), default="global")
     ap.add_argument("--mode", choices=("shadow", "enforce"), default="shadow")
     ap.add_argument("--base-url", default="https://api.warmwinter.io")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
+    if args.device:
+        args.key = "ww_(device-flow)" if args.dry_run else _device_flow(args.base_url)
     if not args.key:
-        sys.exit("No key. Mint one at https://www.warmwinter.io, then: init.py --key ww_...")
+        sys.exit("No key. Either:\n"
+                 "  • init.py --device            (approve in your browser, nothing to paste)\n"
+                 "  • init.py --key ww_...         (mint one at https://www.warmwinter.io)")
     try:
         import warmwinter  # noqa: F401
     except ImportError:

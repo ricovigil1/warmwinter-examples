@@ -31,9 +31,14 @@ earned. **The prompts shrink as trust is earned — but only after it's earned.*
 
 ```bash
 pip install warmwinter
-python init.py --key ww_your_key        # mint a key at https://www.warmwinter.io
+python init.py --device                 # approve in your browser — nothing to paste
+# or:  python init.py --key ww_your_key  (mint a key at https://www.warmwinter.io)
 # add --scope project to gate only this repo; --dry-run to preview; defaults to shadow
 ```
+
+`--device` starts a keyless flow: it prints a link, you approve it in your logged-in
+browser at `/activate`, and the key is minted and handed straight to the installer — no
+secret on your clipboard.
 
 `init.py` copies the hook to a stable location, finds your interpreter, merges the
 `PreToolUse`/`PostToolUse` hooks into your `.claude/settings.json`, and sets the key +
