@@ -40,8 +40,8 @@ run only for trusted projects.
 |---|---|---:|---|
 | `apply_patch`, `Edit`, `Write` | `file_edit` | low | weak: tool completed |
 | ordinary `Bash` / `exec_command` | `shell_cmd` | medium | weak: command completed |
-| `git push` | `git_push` | high | weak initially; CI should supply the strong label |
-| deploy commands | `deploy` | high | weak initially; health should supply the strong label |
+| `git push` | `git_push` | high | left open; CI supplies the strong label by commit SHA |
+| deploy commands | `deploy` | high | left open; deployed health supplies the strong label |
 | destructive commands | `destructive_cmd` | high | weak: command completed |
 | MCP tools | `mcp_tool` | medium | weak: tool completed |
 
