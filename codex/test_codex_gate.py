@@ -45,6 +45,8 @@ class CodexGateTests(unittest.TestCase):
         self.assertEqual(gate.classify("apply_patch", {})[:2], ("file_edit", "low"))
         self.assertEqual(gate.classify("Bash", {"cmd": "git push origin main"})[:2],
                          ("git_push", "high"))
+        self.assertEqual(gate.classify("exec_command", {"cmd": "git push origin feature"})[:2],
+                         ("git_push", "high"))
         self.assertEqual(gate.classify("mcp__github__get_issue", {})[:2],
                          ("mcp_tool", "medium"))
 
@@ -62,6 +64,19 @@ class CodexGateTests(unittest.TestCase):
         gate.post({**event, "tool_response": {"output": "ok"}})
         self.assertEqual(len(self.client.outcomes), 1)
         self.assertEqual(self.client.outcomes[0][0][1], "success")
+
+    def test_git_push_stays_open_for_ci_with_commit_reference(self):
+        gate._head_sha = lambda cwd: "abc123"
+        event = {
+            "session_id": "s1", "turn_id": "t2", "cwd": "C:/repo",
+            "tool_name": "exec_command", "tool_input": {"cmd": "git push origin feature"},
+        }
+        gate.pre(event)
+        gate.post({**event, "tool_response": {"output": "ok"}})
+        decision = self.client.decides[0]
+        self.assertEqual(decision["context"]["commit_sha"], "abc123")
+        self.assertEqual(decision["idempotency_key"], "codex:gitpush:abc123")
+        self.assertEqual(self.client.outcomes, [])
 
     def test_missing_key_is_invisible(self):
         os.environ.pop("WARMWINTER_API_KEY", None)
