@@ -1,0 +1,24 @@
+name: examples-ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  codex-hooks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install public Warm Winter SDK
+        run: pip install "warmwinter>=0.2.0,<0.3"
+      - name: Test Codex hook recipe
+        run: python -m unittest discover -s codex -v
+      - name: Validate hook configuration
+        run: python -m json.tool codex/hooks.snippet.json
