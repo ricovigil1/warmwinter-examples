@@ -1,0 +1,33 @@
+{
+  "description": "Warm Winter shadow-mode observation for Codex tool calls.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|apply_patch|Edit|Write|mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /ABS/PATH/ww_codex_gate.py pre",
+            "commandWindows": "py -3 C:\\ABS\\PATH\\ww_codex_gate.py pre",
+            "timeout": 15,
+            "statusMessage": "Warm Winter is observing this tool call"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|apply_patch|Edit|Write|mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /ABS/PATH/ww_codex_gate.py post",
+            "commandWindows": "py -3 C:\\ABS\\PATH\\ww_codex_gate.py post",
+            "timeout": 15,
+            "statusMessage": "Warm Winter is recording the outcome"
+          }
+        ]
+      }
+    ]
+  }
+}
