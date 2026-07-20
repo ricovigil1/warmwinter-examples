@@ -1,0 +1,61 @@
+# Warm Winter — strong-label CI verifier
+# =======================================
+# Drop this in your repo at .github/workflows/warmwinter-strong-label.yml.
+#
+# The Claude Code gate hook (ww_claude_code_gate.py) records a `git_push` decision
+# and stamps it with the commit SHA, then leaves it OPEN. This workflow closes that
+# loop with the STRONG label: it fires when your real CI run finishes and reports
+# whether tests/build actually passed on that exact commit. That — not "did the push
+# command exit 0?" — is what lets the agent_ops/git_push cell earn `verified`.
+#
+# Setup (once):
+#   1. Add a repo secret WARMWINTER_API_KEY  (mint at /api/v1/gate/keys, scope: gate).
+#   2. Set `workflows:` below to the NAME of your existing build/test workflow.
+#
+# It reports success ONLY on a green run; anything else (failure/cancelled/timed_out)
+# is a failure label — an honest negative is exactly what the cell needs to calibrate.
+name: warmwinter-strong-label
+
+on:
+  workflow_run:
+    workflows: ["CI"]            # ← the name: of YOUR build/test workflow
+    types: [completed]
+
+jobs:
+  report-outcome:
+    runs-on: ubuntu-latest
+    # Only report for runs we can label cleanly (skip skipped/neutral/stale runs).
+    if: >
+      contains(fromJSON('["success","failure","cancelled","timed_out"]'),
+               github.event.workflow_run.conclusion)
+    steps:
+      - name: Report CI outcome to the Warm Winter gate
+        env:
+          WW_KEY: ${{ secrets.WARMWINTER_API_KEY }}
+          WW_BASE: ${{ vars.WARMWINTER_BASE_URL || 'https://api.warmwinter.io' }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        run: |
+          set -euo pipefail
+          if [ -z "${WW_KEY:-}" ]; then
+            echo "WARMWINTER_API_KEY not set — skipping (nothing to report to)."; exit 0
+          fi
+          if [ "$CONCLUSION" = "success" ]; then OUTCOME=success; else OUTCOME=failure; fi
+          echo "Reporting $OUTCOME for commit $SHA"
+          # 404 here is normal & fine: it just means no open gate decision matched this
+          # SHA (e.g. the push wasn't gated). Don't fail the workflow on it.
+          # decision_type:"git_push" disambiguates from a deploy decision for the
+          # same commit (the deploy is labeled separately by deploy_health_label.py).
+          code=$(curl -sS -o /tmp/ww.json -w '%{http_code}' \
+            -X POST "$WW_BASE/api/v1/gate/outcome/by-ref" \
+            -H "X-Api-Key: $WW_KEY" -H "Content-Type: application/json" \
+            -d "{\"commit_sha\":\"$SHA\",\"outcome\":\"$OUTCOME\",\"decision_type\":\"git_push\",\"observed\":{\"ci_conclusion\":\"$CONCLUSION\",\"run_id\":\"${{ github.event.workflow_run.id }}\"}}")
+          cat /tmp/ww.json; echo
+          if [ "$code" = "200" ]; then
+            echo "✓ strong label recorded"
+          elif [ "$code" = "404" ]; then
+            echo "· no open decision for this SHA (not gated) — nothing to do"
+          else
+            echo "gate returned HTTP $code"; exit 1
+          fi
+
