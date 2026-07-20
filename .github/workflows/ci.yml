@@ -9,6 +9,20 @@ permissions:
   contents: read
 
 jobs:
+  claude-code-hooks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Test Claude Code command classification
+        run: python claude-code/test_classify.py
+      - name: Compile strong-label helpers
+        run: python -m py_compile claude-code/ww_claude_code_gate.py claude-code/verify_and_label.py claude-code/deploy_health_label.py
+      - name: Validate hook configuration
+        run: python -m json.tool claude-code/settings.snippet.json
+
   codex-hooks:
     runs-on: ubuntu-latest
     steps:
