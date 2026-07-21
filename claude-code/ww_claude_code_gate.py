@@ -88,7 +88,7 @@ def _head_sha(command: str = ""):
 # (CI pass, health check, typecheck) — this is how you sidestep the weak/strong
 # label problem for a first integration.
 #
-# CONFIDENCE IS A REAL PREDICTOR, NOT A CONSTANT. The weak-label outcome is "did the
+# Confidence is a predictor, not a constant. The weak-label outcome is "did the
 # tool error?", so `confidence` is an honest prior on P(this specific action exits
 # clean). It MUST vary with the action: a constant confidence puts every outcome in one
 # calibration bin, which gives a cell zero resolution (no skill over the base rate) — so
@@ -96,7 +96,8 @@ def _head_sha(command: str = ""):
 # on real signal (read-only vs install vs search; Write vs Edit; search vs fetch) the cell
 # gets genuine discrimination (resolution); the gate's recalibrator then maps these priors
 # to true rates (calibration). These are deliberately NOT fit to the observed data — they're
-# domain priors the gate validates against outcomes. Tune them only with honest reasoning.
+# domain priors the gate validates against outcomes. Treat these example values as
+# illustrative seeds and fit deployment-specific priors from honest outcome data.
 
 def _shell_confidence(cmd: str) -> float:
     """Honest prior that a shell command exits 0, from what the command actually is."""

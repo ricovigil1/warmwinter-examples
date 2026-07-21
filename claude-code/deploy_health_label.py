@@ -60,7 +60,7 @@ def check_deploy(health_url: str, commit: str, *, window_s: float, interval_s: f
     healthy_streak = 0
     polls = 0
     last_commit = None
-    # Phase 1: wait for the new revision to come up (commit matches).
+    # Wait for the new revision to come up (commit matches).
     while time.time() < deadline:
         last_commit, healthy = _poll_health(health_url, timeout=interval_s)
         polls += 1
