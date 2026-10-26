@@ -22,10 +22,7 @@ agent wants to run a tool
 At **cold start every cell is ungrounded.** So don't let the gate steer yet — start
 in **shadow mode** (the default): the hook *records* every decision and outcome but
 emits no permission decision, leaving Claude Code's normal allow/ask flow untouched.
-**Zero friction, but the cells calibrate from your real work.** After ~1–2 weeks the
-`git_push` / `deploy` cells (which have strong CI/health labels) move to `verified`;
-*then* flip `WW_GATE_MODE=enforce` and the gate starts auto-allowing what it has
-earned. **The prompts shrink as trust is earned — but only after it's earned.**
+**Tool outcomes alone are weak evidence.** There is no fixed calendar threshold for becoming verified. Do not flip `WW_GATE_MODE=enforce` merely because one or two weeks have passed or a CI script posted an outcome. Independent evidence provenance, current cell qualifications and the available execution authority must be checked separately.
 
 ## Setup — one command
 
@@ -67,7 +64,7 @@ once the cells you care about reach `verified`.
   result. A successful `git_push`, `pr_merge`, or `deploy` command does **not** prove
   the revision was good, so those decisions stay open until a strong verifier closes
   them by commit SHA:
-  - **push → CI:** copy [`strong_label_ci.yml`](strong_label_ci.yml) into
+  - **push → CI:** the legacy by-reference recipe [`strong_label_ci.yml`](strong_label_ci.yml) reports a **caller-asserted weak outcome** until a separately authenticated protected observer qualifies the evidence; you can copy it into
     `.github/workflows/warmwinter-strong-label.yml` and name your real CI workflow;
   - **merge → verifier:** run [`verify_and_label.py`](verify_and_label.py) with the
     repository's required smoke/build command;
@@ -75,7 +72,7 @@ once the cells you care about reach `verified`.
     after deploy; it requires the target commit to be live and stable.
 
   These paths pass `decision_type` as well as the SHA, so push, merge, and deploy
-  decisions for one revision cannot cross-resolve. Don't grant
+  decisions for one revision cannot cross-resolve. Matching SHA and bearer key proves a join, **not independent CI/deploy provenance**. Don't grant
   autonomy on "was this the *right* change" (needs human review) until you've got a
   strong signal for it.
 - **Confidence:** the hook cannot read the model's internal confidence. It derives a
