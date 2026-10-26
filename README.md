@@ -29,3 +29,10 @@ The gate **advises** — your code decides whether to act. It never sits in your
 execution path. The objective is well-evidenced calibration, not automatic self-certification. Seed/backtest evidence is a **reference portfolio**; it must not be presented as verified competence earned by a new account. See the [developer contract](https://www.warmwinter.io/developers) for the current API surface and credential scopes.
 
 **Agent integration status:** Run-lifecycle and seven consultation helpers are in separately reviewed development PRs, not guaranteed in the currently published packages. A runtime-bound Gate key and a consultation-only key are different credentials; neither confers autonomous execution authority. Ordinary bearer-authenticated `/gate/outcome/by-ref` reports are caller-asserted and must not be treated as independently verified CI/deploy proof. The protected observer/OIDC integration is the separate strong-evidence path.
+
+Development-source examples: [canonical run](canonical-run/example.py) and
+[consultation discovery, POST and retrieval](consultation/example.py). Use the
+matching reviewed SDK source branch until its separately authorized release;
+the examples do not claim that installed v0.3.0 exposes these new methods.
+Run only with permission to retain the described records. Provision keys through
+private environment variables; never put credentials in code or command history.
