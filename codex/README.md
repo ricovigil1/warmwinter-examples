@@ -1,8 +1,7 @@
 # Observe Codex with Warm Winter
 
 This recipe connects Codex's supported lifecycle hooks to Warm Winter. It
-records local tool decisions and execution outcomes so your
-`agent_ops x decision_type` cells can calibrate from real work.
+records local tool decisions and execution observations so you can inspect reported evidence. Tool success reports are weak and do not by themselves establish verified calibration.
 
 It is deliberately **shadow-only**:
 
@@ -40,13 +39,13 @@ run only for trusted projects.
 |---|---|---:|---|
 | `apply_patch`, `Edit`, `Write` | `file_edit` | low | weak: tool completed |
 | ordinary `Bash` / `exec_command` | `shell_cmd` | medium | weak: command completed |
-| `git push` | `git_push` | high | left open; CI supplies the strong label by commit SHA |
-| deploy commands | `deploy` | high | left open; deployed health supplies the strong label |
+| `git push` | `git_push` | high | left open; only an independently authenticated protected verifier can add strong CI evidence |
+| deploy commands | `deploy` | high | left open; bearer-authenticated health reports are weak until independently attested |
 | destructive commands | `destructive_cmd` | high | weak: command completed |
 | MCP tools | `mcp_tool` | medium | weak: tool completed |
 
 Tool-exit labels only answer “did it run?”, not “was it the right judgment?”
-Use CI, deploy health, or human review as strong labels for consequential cells.
+CI and deploy-health observations are useful, but a caller-provided `source=ci` field or SHA is not proof of independent verification. Strong labels require the separate protected observer/OIDC evidence path. Human feedback remains reported feedback unless independently authenticated under an admitted policy.
 
 ## Coverage limits
 
